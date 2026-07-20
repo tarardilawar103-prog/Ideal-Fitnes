@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fieldhouse — A club for every kind of strong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --chalk:#F7F6F3;
+    --sage:#E7EAE2;
+    --ink:#1C231F;
+    --pine:#2F4A3C;
+    --pine-light:#3E5F4C;
+    --brass:#B08D2B;
+    --brass-bright:#C9A227;
+    --stone:#D8D4CB;
+    --stone-dark:#B8B3A6;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--chalk);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(247,246,243,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--stone);
+  }
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.35rem;
+    letter-spacing:-0.02em;
+  }
+  .logo span{color:var(--brass);}
+  .nav-links{
+    display:flex;
+    gap:36px;
+    list-style:none;
+    font-size:0.95rem;
+    font-weight:500;
+  }
+  .nav-links a{
+    text-decoration:none;
+    position:relative;
+    padding:4px 0;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0; height:2px;
+    background:var(--brass);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover::after, .nav-links a:focus-visible::after{width:100%;}
+  .nav-cta{
+    background:var(--pine);
+    color:var(--chalk);
+    border:none;
+    padding:11px 22px;
+    border-radius:2px;
+    font-family:'Public Sans', sans-serif;
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .nav-cta:hover{background:var(--pine-light); transform:translateY(-1px);}
+  .mobile-toggle{display:none;}
+
+  :focus-visible{
+    outline:2px solid var(--brass);
+    outline-offset:2px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--pine);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:8px; height:8px;
+    background:var(--brass-bright);
+    border-radius:50%;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 4.4vw, 3.6rem);
+    line-height:1.06;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--pine);
+  }
+  .hero p.lede{
+    font-size:1.1rem;
+    color:#48524A;
+    max-width:46ch;
+    margin-bottom:32px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    background:var(--pine);
+    color:var(--chalk);
+    border:none;
+    padding:15px 28px;
+    font-size:0.95rem;
+    font-weight:600;
+    border-radius:2px;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .btn-primary:hover{background:var(--pine-light); transform:translateY(-2px);}
+  .btn-ghost{
+    background:none;
+    border:none;
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--ink);
+    text-decoration:underline;
+    text-decoration-color:var(--brass-bright);
+    text-underline-offset:5px;
+    cursor:pointer;
+  }
+
+  /* ---- Split-flap schedule board (signature element) ---- */
+  .board{
+    background:var(--ink);
+    border-radius:4px;
+    padding:26px 24px 22px;
+    box-shadow:0 30px 60px -20px rgba(28,35,31,0.45);
+  }
+  .board-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:16px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,0.14);
+  }
+  .board-title{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--chalk);
+    font-size:0.82rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+  .board-clock{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--brass-bright);
+    font-size:0.82rem;
+  }
+  .board-rows{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .board-row{
+    display:grid;
+    grid-template-columns:64px 1fr 90px;
+    gap:12px;
+    align-items:center;
+    padding:11px 6px;
+    border-radius:2px;
+  }
+  .board-row.now{background:rgba(201,162,39,0.13);}
+  .flap{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--chalk);
+    font-size:0.85rem;
+    letter-spacing:0.02em;
+  }
+  .board-row.now .flap{color:var(--brass-bright); font-weight:500;}
+  .flap-class{
+    font-family:'Public Sans', sans-serif;
+    color:#E8E6DF;
+    font-size:0.92rem;
+    font-weight:500;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+  .flap-room{
+    font-family:'IBM Plex Mono', monospace;
+    color:#8C948A;
+    font-size:0.76rem;
+    text-align:right;
+  }
+  .board-row .flap-class-anim{
+    display:inline-block;
+    animation:flapIn 0.5s ease-out both;
+  }
+  @keyframes flapIn{
+    0%{transform:translateY(-6px); opacity:0;}
+    100%{transform:translateY(0); opacity:1;}
+  }
+
+  /* ---------- PROGRAMS ---------- */
+  section{padding:88px 0;}
+  .section-head{
+    max-width:640px;
+    margin-bottom:52px;
+  }
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{
+    font-size:clamp(1.8rem, 3vw, 2.5rem);
+    line-height:1.12;
+    margin-bottom:14px;
+  }
+  .section-head p{color:#48524A; font-size:1.02rem;}
+
+  .programs-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--stone);
+    border:1px solid var(--stone);
+  }
+  .program-card{
+    background:var(--chalk);
+    padding:34px 26px;
+    transition:background 0.25s ease;
+  }
+  .program-card:hover{background:var(--sage);}
+  .program-icon{
+    width:38px; height:38px;
+    margin-bottom:20px;
+    color:var(--pine);
+  }
+  .program-card h3{
+    font-size:1.15rem;
+    margin-bottom:10px;
+  }
+  .program-card p{
+    font-size:0.9rem;
+    color:#565F57;
+  }
+
+  /* ---------- FACILITIES ---------- */
+  .facilities{background:var(--pine); color:var(--chalk);}
+  .facilities h2, .facilities .eyebrow{color:var(--chalk);}
+  .facilities .eyebrow::before{background:var(--brass-bright);}
+  .facilities .section-head p{color:#CBD6CE;}
+  .fac-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:28px;
+  }
+  .fac-item{
+    border-top:1px solid rgba(247,246,243,0.25);
+    padding-top:20px;
+  }
+  .fac-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--brass-bright);
+    margin-bottom:12px;
+    display:block;
+  }
+  .fac-item h3{
+    color:var(--chalk);
+    font-size:1.05rem;
+    margin-bottom:8px;
+  }
+  .fac-item p{
+    font-size:0.88rem;
+    color:#CBD6CE;
+  }
+
+  /* ---------- MEMBERSHIP ---------- */
+  .plans-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  .plan{
+    border:1px solid var(--stone);
+    border-radius:4px;
+    padding:36px 30px;
+    background:var(--chalk);
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .plan:hover{
+    transform:translateY(-6px);
+    box-shadow:0 24px 48px -24px rgba(28,35,31,0.25);
+  }
+  .plan.featured{
+    border-color:var(--pine);
+    background:var(--sage);
+    position:relative;
+  }
+  .plan-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--brass);
+    position:absolute;
+    top:20px; right:24px;
+  }
+  .plan h3{font-size:1.3rem; margin-bottom:6px;}
+  .plan .price{
+    font-family:'Fraunces', serif;
+    font-size:2.4rem;
+    font-weight:500;
+    margin:14px 0 4px;
+  }
+  .plan .price span{
+    font-family:'Public Sans', sans-serif;
+    font-size:0.95rem;
+    font-weight:500;
+    color:#565F57;
+  }
+  .plan p.desc{
+    font-size:0.9rem;
+    color:#565F57;
+    margin-bottom:24px;
+  }
+  .plan ul{
+    list-style:none;
+    margin-bottom:32px;
+    flex-grow:1;
+  }
+  .plan li{
+    font-size:0.9rem;
+    padding:9px 0;
+    border-top:1px solid var(--stone);
+    display:flex;
+    gap:10px;
+  }
+  .plan li:first-child{border-top:none;}
+  .plan li::before{
+    content:'—';
+    color:var(--brass);
+    flex-shrink:0;
+  }
+  .plan button{
+    width:100%;
+    padding:14px;
+    border-radius:2px;
+    font-weight:600;
+    font-size:0.92rem;
+    cursor:pointer;
+    border:1px solid var(--pine);
+    background:none;
+    color:var(--pine);
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  .plan.featured button{
+    background:var(--pine);
+    color:var(--chalk);
+  }
+  .plan button:hover{background:var(--pine); color:var(--chalk);}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testimonials{background:var(--sage);}
+  .test-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:32px;
+  }
+  .test-card p.quote{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    font-weight:400;
+    font-style:italic;
+    line-height:1.4;
+    margin-bottom:20px;
+  }
+  .test-card .who{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--pine);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+
+  /* ---------- CTA / VISIT ---------- */
+  .visit .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:start;
+  }
+  .visit h2{font-size:clamp(1.9rem,3.2vw,2.6rem); margin-bottom:16px;}
+  .visit p{color:#48524A; max-width:44ch; margin-bottom:28px;}
+  .hours-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.92rem;
+  }
+  .hours-table td{
+    padding:9px 0;
+    border-top:1px solid var(--stone);
+  }
+  .hours-table td:last-child{
+    text-align:right;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--pine);
+  }
+  .tour-form{
+    background:var(--chalk);
+    border:1px solid var(--stone);
+    border-radius:4px;
+    padding:32px;
+  }
+  .tour-form label{
+    display:block;
+    font-size:0.82rem;
+    font-weight:600;
+    margin-bottom:6px;
+    margin-top:18px;
+  }
+  .tour-form label:first-child{margin-top:0;}
+  .tour-form input{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--stone-dark);
+    border-radius:2px;
+    font-family:'Public Sans', sans-serif;
+    font-size:0.95rem;
+    background:var(--chalk);
+  }
+  .tour-form input:focus{border-color:var(--pine);}
+  .tour-form button{
+    margin-top:26px;
+    width:100%;
+  }
+  .form-note{
+    font-size:0.8rem;
+    color:#78806F;
+    margin-top:14px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink);
+    color:var(--chalk);
+    padding:56px 0 28px;
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:40px;
+    border-bottom:1px solid rgba(247,246,243,0.14);
+    margin-bottom:24px;
+  }
+  footer .logo{color:var(--chalk); margin-bottom:14px;}
+  footer .foot-desc{
+    font-size:0.9rem;
+    color:#A9AFA4;
+    max-width:32ch;
+  }
+  footer h4{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#8C948A;
+    margin-bottom:16px;
+  }
+  footer ul{list-style:none;}
+  footer li{margin-bottom:10px;}
+  footer a{
+    color:#CBD1C6;
+    text-decoration:none;
+    font-size:0.9rem;
+  }
+  footer a:hover{color:var(--brass-bright);}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.8rem;
+    color:#78806F;
+  }
+
+  /* ---------- REVEAL ANIMATION ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:920px){
+    .nav-links{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .programs-grid{grid-template-columns:repeat(2,1fr);}
+    .fac-grid{grid-template-columns:repeat(2,1fr);}
+    .plans-grid{grid-template-columns:1fr;}
+    .test-grid{grid-template-columns:1fr;}
+    .visit .wrap{grid-template-columns:1fr;}
+    .footer-top{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 20px;}
+    section{padding:64px 0;}
+    .board-row{grid-template-columns:52px 1fr 60px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">FIELD<span>HOUSE</span></div>
+    <ul class="nav-links">
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#facilities">Facilities</a></li>
+      <li><a href="#membership">Membership</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('visit').scrollIntoView()">Book a tour</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Open to everyone, every day</div>
+      <h1>One club.<br>Every kind of <em>strong.</em></h1>
+      <p class="lede">Strength floor, group classes, a lap pool, and a kids' zone — under one roof, on one membership. No experience required, no one turned away.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('visit').scrollIntoView()">Book a free tour</button>
+        <button class="btn-ghost" onclick="document.getElementById('membership').scrollIntoView()">See membership plans</button>
+      </div>
+    </div>
+    <div class="board" aria-label="Today's class schedule">
+      <div class="board-head">
+        <span class="board-title">Today at Fieldhouse</span>
+        <span class="board-clock" id="clock"></span>
+      </div>
+      <div class="board-rows" id="board-rows"></div>
+    </div>
+  </div>
+</section>
+
+<section id="programs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Programs</div>
+      <h2>Whatever brought you in, there's a floor for it.</h2>
+      <p>Four ways to train, all included in every membership. Move between them as your goals change.</p>
+    </div>
+    <div class="programs-grid reveal">
+      <div class="program-card">
+        <svg class="program-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8v8M8 5v14M12 8v8M16 5v14M20 8v8" stroke-linecap="round"/></svg>
+        <h3>Strength floor</h3>
+        <p>Full racks, free weights, and machines, laid out so beginners and lifters share the space comfortably.</p>
+      </div>
+      <div class="program-card">
+        <svg class="program-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Group classes</h3>
+        <p>Cycling, circuits, mobility, and yoga run all day, so there's a class near whatever time you've got.</p>
+      </div>
+      <div class="program-card">
+        <svg class="program-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z" stroke-linejoin="round"/></svg>
+        <h3>Family &amp; kids</h3>
+        <p>Supervised kids' zone, a shallow pool, and a family swim hour, so training doesn't need a babysitter.</p>
+      </div>
+      <div class="program-card">
+        <svg class="program-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.35-9.5-9C1 8 3 4 7 4c2 0 4 1 5 3 1-2 3-3 5-3 4 0 6 4 4.5 8C19 16.65 12 21 12 21z" stroke-linejoin="round"/></svg>
+        <h3>Recovery &amp; wellness</h3>
+        <p>Sauna, stretch room, and a massage chair area for the day your body asks you to slow down.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="facilities" id="facilities">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The building</div>
+      <h2>What's actually in the building.</h2>
+      <p>No stock-photo promises — here's what you'll walk past on your first lap.</p>
+    </div>
+    <div class="fac-grid reveal">
+      <div class="fac-item">
+        <span class="fac-num">01</span>
+        <h3>25m lap pool</h3>
+        <p>Six lanes, plus a shallow end for lessons and family swim.</p>
+      </div>
+      <div class="fac-item">
+        <span class="fac-num">02</span>
+        <h3>Turf &amp; sled zone</h3>
+        <p>2,000 sq ft for sled pushes, sprints, and class circuits.</p>
+      </div>
+      <div class="fac-item">
+        <span class="fac-num">03</span>
+        <h3>Kids' zone</h3>
+        <p>Staffed drop-in care, ages 2–10, included with family plans.</p>
+      </div>
+      <div class="fac-item">
+        <span class="fac-num">04</span>
+        <h3>Locker &amp; sauna</h3>
+        <p>Full locker rooms, showers, and a dry sauna on both sides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="membership">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Membership</div>
+      <h2>Pick a plan. Change it whenever life does.</h2>
+      <p>No enrollment fee, no lock-in contract. Upgrade, downgrade, or pause month to month.</p>
+    </div>
+    <div class="plans-grid reveal">
+      <div class="plan">
+        <h3>Basic</h3>
+        <div class="price">$39<span>/month</span></div>
+        <p class="desc">Full gym floor access, whenever you want to train.</p>
+        <ul>
+          <li>Strength floor &amp; cardio</li>
+          <li>Locker room &amp; showers</li>
+          <li>Open 5am–11pm daily</li>
+        </ul>
+        <button>Choose Basic</button>
+      </div>
+      <div class="plan featured">
+        <span class="plan-tag">Most popular</span>
+        <h3>Plus</h3>
+        <div class="price">$59<span>/month</span></div>
+        <p class="desc">Everything in Basic, plus unlimited classes and the pool.</p>
+        <ul>
+          <li>Everything in Basic</li>
+          <li>Unlimited group classes</li>
+          <li>Lap pool &amp; sauna access</li>
+          <li>1 guest pass / month</li>
+        </ul>
+        <button>Choose Plus</button>
+      </div>
+      <div class="plan">
+        <h3>Family</h3>
+        <div class="price">$89<span>/month</span></div>
+        <p class="desc">Plus, for up to two adults and their kids.</p>
+        <ul>
+          <li>Everything in Plus</li>
+          <li>Up to 2 adults on one plan</li>
+          <li>Free kids' zone drop-in</li>
+          <li>Family swim hour access</li>
+        </ul>
+        <button>Choose Family</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">From the club</div>
+      <h2>What members say after month one.</h2>
+    </div>
+    <div class="test-grid reveal">
+      <div class="test-card">
+        <p class="quote">"I hadn't set foot in a gym in ten years. Nobody here made me feel behind."</p>
+        <div class="who">Renata M. — Plus member</div>
+      </div>
+      <div class="test-card">
+        <p class="quote">"My kids ask to come on weekends now. That was not a sentence I expected to say."</p>
+        <div class="who">Devon K. — Family member</div>
+      </div>
+      <div class="test-card">
+        <p class="quote">"The 6am strength class fits my schedule better than my old gym ever did."</p>
+        <div class="who">Priya S. — Plus member</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow reveal">Visit</div>
+      <h2 class="reveal">Come see it before you join.</h2>
+      <p class="reveal">Every tour includes a walkthrough, one free class of your choice, and no pressure to sign up on the spot.</p>
+      <table class="hours-table reveal">
+        <tr><td>Monday – Friday</td><td>5:00 AM – 11:00 PM</td></tr>
+        <tr><td>Saturday</td><td>6:00 AM – 9:00 PM</td></tr>
+        <tr><td>Sunday</td><td>7:00 AM – 8:00 PM</td></tr>
+        <tr><td>Address</td><td>412 Alder Street</td></tr>
+      </table>
+    </div>
+    <form class="tour-form reveal" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Request sent';">
+      <label for="name">Name</label>
+      <input id="name" type="text" required placeholder="Your name">
+      <label for="email">Email</label>
+      <input id="email" type="email" required placeholder="you@email.com">
+      <label for="phone">Phone (optional)</label>
+      <input id="phone" type="tel" placeholder="(555) 000-0000">
+      <button class="btn-primary" type="submit">Request a tour</button>
+      <p class="form-note">We'll text or email within one business day to schedule your visit.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="logo">FIELD<span>HOUSE</span></div>
+        <p class="foot-desc">A neighborhood fitness club for lifters, swimmers, beginners, and their kids.</p>
+      </div>
+      <div>
+        <h4>Club</h4>
+        <ul>
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#facilities">Facilities</a></li>
+          <li><a href="#membership">Membership</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Cancel or pause</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="#visit">Book a tour</a></li>
+          <li><a href="#">412 Alder Street</a></li>
+          <li><a href="#">(555) 010-2200</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Fieldhouse Fitness Club</span>
+      <span>Open every day of the year</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock(){
+    const el = document.getElementById('clock');
+    const now = new Date();
+    let h = now.getHours(), m = now.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    el.textContent = h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+  }
+  updateClock();
+  setInterval(updateClock, 1000 * 30);
+
+  // Schedule board data — times relative to now for a "live" feel
+  const classes = [
+    { time:"6:00A", name:"Sunrise Strength", room:"Floor A" },
+    { time:"7:15A", name:"Family Swim", room:"Pool" },
+    { time:"9:00A", name:"Mobility & Stretch", room:"Studio 2" },
+    { time:"12:00P", name:"Lunch Circuit", room:"Turf" },
+    { time:"4:30P", name:"Kids' Swim Lessons", room:"Pool" },
+    { time:"6:00P", name:"Power Hour", room:"Floor A" },
+    { time:"7:30P", name:"Evening Yoga", room:"Studio 1" },
+  ];
+
+  function nearestIndex(){
+    const now = new Date();
+    const mins = now.getHours()*60 + now.getMinutes();
+    let best = 0, bestDiff = Infinity;
+    classes.forEach((c,i)=>{
+      let h = parseInt(c.time);
+      const isPM = c.time.includes('P');
+      if(isPM && h !== 12) h += 12;
+      if(!isPM && h === 12) h = 0;
+      const cmins = h*60 + parseInt(c.time.match(/:(\d+)/)[1]);
+      const diff = Math.abs(cmins - mins);
+      if(diff < bestDiff){ bestDiff = diff; best = i; }
+    });
+    return best;
+  }
+
+  const rowsEl = document.getElementById('board-rows');
+  const activeIdx = nearestIndex();
+  classes.forEach((c, i) => {
+    const row = document.createElement('div');
+    row.className = 'board-row' + (i === activeIdx ? ' now' : '');
+    row.innerHTML = `
+      <span class="flap">${c.time}</span>
+      <span class="flap-class"><span class="flap-class-anim" style="animation-delay:${i * 0.08}s">${c.name}</span></span>
+      <span class="flap-room">${c.room}</span>
+    `;
+    rowsEl.appendChild(row);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
